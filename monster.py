@@ -4,7 +4,7 @@ from traitlets import Int
 from support import import_folder
 
 
-class Player(pygame.sprite.Sprite):
+class Monster(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
         self.import_character_assets()

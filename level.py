@@ -1,6 +1,7 @@
 import pygame
 from tiles import Tile
 from player import Player
+from monster import Monster
 from settings import tile_size, screen_width
 
 class Level:
@@ -15,13 +16,15 @@ class Level:
     def setup_level(self, layout):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
-
+        self.monster1 = pygame.sprite.GroupSingle()   
         for row_index, row in enumerate(layout):
             for col_index, tile in enumerate(row):
                 if tile == 'X':
                     self.tiles.add(Tile((col_index * tile_size, row_index * tile_size), tile_size))
                 if tile == 'P':
                     self.player.add(Player((col_index * tile_size, row_index * tile_size)))
+                if tile == 'M':
+                    self.monster1.add(Monster((col_index * tile_size, row_index * tile_size)))
 
     def scroll_x(self):
         player = self.player.sprite
@@ -29,10 +32,10 @@ class Level:
         direction_x = player.direction.x
 
         if player_x < screen_width/4 and direction_x < 0:
-            self.world_shift = 8
+            self.world_shift = -player.direction.x*8
             player.speed = 0
         elif player_x > screen_width - screen_width / 4 and direction_x > 0:
-            self.world_shift = -8
+            self.world_shift = -player.direction.x*8
             player.speed = 0
         else:
             self.world_shift = 0
@@ -87,3 +90,4 @@ class Level:
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
         self.player.draw(self.display_surface)
+        self.monster1.update()
