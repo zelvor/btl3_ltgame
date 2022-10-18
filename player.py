@@ -25,6 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.on_ceiling = False
         self.on_left = False
         self.on_right = False
+        self.buff = "no buff"
 
     def import_character_assets(self):
         character_path = 'assets/Individual Sprite/'
@@ -67,20 +68,20 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT]:
-            self.direction.x = -1
+            self.direction.x = -1 * (2 if self.buff == "Fast" else 1)
             self.facing_right = False
         elif keys[pygame.K_RIGHT]:
-            self.direction.x = 1
+            self.direction.x = 1 * (2 if self.buff == "Fast" else 1)
             self.facing_right = True
         else:
             self.direction.x = 0
 
-        if keys[pygame.K_x] and self.on_ground:
+        if keys[pygame.K_x] and (self.on_ground or self.buff == "Fly"):
             self.jump()
 
         if keys[pygame.K_z]:
             self.dash()
-            
+
     def get_status(self):
         if self.direction.y < 0:
             self.status = 'Jump'
@@ -98,7 +99,9 @@ class Player(pygame.sprite.Sprite):
 
     def jump(self):
         self.direction.y = self.jump_speed
+
     def dash(self):
+        self.animate()
         dash = (1 if self.facing_right == True else -1)
         self.direction.x *= 1.5
 

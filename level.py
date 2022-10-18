@@ -1,9 +1,11 @@
 import pygame
 from tiles import Tile
 from coins import Coin
+from item_jump import Item_jump
+from item_speed import Item_speed
 from player import Player
 from monster import Monster
-from settings import tile_size, screen_width
+from settings import tile_size, screen_width, screen_height
 
 class Level:
     def __init__(self, level_data, surface):
@@ -17,6 +19,8 @@ class Level:
     def setup_level(self, layout):
         self.tiles = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
+        self.item_jumps = pygame.sprite.Group()
+        self.item_speeds = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         self.monster1 = pygame.sprite.GroupSingle()   
         for row_index, row in enumerate(layout):
@@ -29,6 +33,10 @@ class Level:
                     self.monster1.add(Monster((col_index * tile_size, row_index * tile_size)))
                 if tile == 'C':
                     self.coins.add(Coin((col_index * tile_size, row_index * tile_size), tile_size/2))
+                if tile == 'J':
+                    self.item_jumps.add(Item_jump((col_index * tile_size, row_index * tile_size), tile_size/3))
+                if tile == 'S':
+                    self.item_speeds.add(Item_speed((col_index * tile_size, row_index * tile_size), tile_size/3))
 
     def scroll_x(self):
         player = self.player.sprite
@@ -84,15 +92,25 @@ class Level:
             player.on_ground = False
         if player.on_ceiling and player.direction.y > 0:
             player.on_ceiling = False
+
     def interact(self):
         #Check pick up coin and stuff
         for coin in self.coins:
             if self.player.sprite.rect.colliderect(coin.rect):
                 coin.kill()
+        for i_jump in self.item_jumps:
+            if self.player.sprite.rect.colliderect(i_jump.rect):
+                i_jump.kill()
+                self.player.sprite.buff = "Fly"
+        for i_speed in self.item_speeds:
+            if self.player.sprite.rect.colliderect(i_speed.rect):
+                i_speed.kill()
+                self.player.sprite.buff = "Fast"
         return
 
     def run(self):
         keys = pygame.key.get_pressed()
+
         if keys[pygame.K_c]:
             self.interact()
 
@@ -100,6 +118,19 @@ class Level:
         self.tiles.draw(self.display_surface)
         self.coins.update(self.world_shift)
         self.coins.draw(self.display_surface)
+        self.item_jumps.update(self.world_shift)
+        self.item_jumps.draw(self.display_surface)
+        self.item_speeds.update(self.world_shift)
+        self.item_speeds.draw(self.display_surface)
+
+        font = pygame.font.Font('fonts/Pixelboy.ttf', 80)
+        life = font.render("x3", True, (255, 255, 255))
+        self.display_surface.blit(life, (screen_width/4 - 100, screen_height - 50))
+        score = font.render("0", True, (255, 255, 255))
+        self.display_surface.blit(score, (screen_width/2 - 100, screen_height - 50))
+        buff = font.render(self.player.sprite.buff, True, (255, 255, 255))
+        self.display_surface.blit(buff, (screen_width/4*3 - 100, screen_height - 50))
+
         self.scroll_x()
 
         self.player.update()
