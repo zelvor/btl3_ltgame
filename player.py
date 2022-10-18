@@ -80,7 +80,7 @@ class Player(pygame.sprite.Sprite):
 
         if keys[pygame.K_z]:
             self.dash()
-
+            
     def get_status(self):
         if self.direction.y < 0:
             self.status = 'Jump'

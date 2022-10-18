@@ -1,5 +1,6 @@
 import pygame
 from tiles import Tile
+from coins import Coin
 from player import Player
 from monster import Monster
 from settings import tile_size, screen_width
@@ -15,6 +16,7 @@ class Level:
         
     def setup_level(self, layout):
         self.tiles = pygame.sprite.Group()
+        self.coins = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         self.monster1 = pygame.sprite.GroupSingle()   
         for row_index, row in enumerate(layout):
@@ -25,6 +27,8 @@ class Level:
                     self.player.add(Player((col_index * tile_size, row_index * tile_size)))
                 if tile == 'M':
                     self.monster1.add(Monster((col_index * tile_size, row_index * tile_size)))
+                if tile == 'C':
+                    self.coins.add(Coin((col_index * tile_size, row_index * tile_size), tile_size/2))
 
     def scroll_x(self):
         player = self.player.sprite
@@ -80,14 +84,25 @@ class Level:
             player.on_ground = False
         if player.on_ceiling and player.direction.y > 0:
             player.on_ceiling = False
+    def interact(self):
+        #Check pick up coin and stuff
+        for coin in self.coins:
+            if self.player.sprite.rect.colliderect(coin.rect):
+                coin.kill()
+        return
 
     def run(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_c]:
+            self.interact()
+
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)
+        self.coins.update(self.world_shift)
+        self.coins.draw(self.display_surface)
         self.scroll_x()
 
         self.player.update()
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
         self.player.draw(self.display_surface)
-        self.monster1.update()
