@@ -25,11 +25,14 @@ class Player(pygame.sprite.Sprite):
         self.on_ceiling = False
         self.on_left = False
         self.on_right = False
+
+        #status player
+        self.hp = 5
         self.buff = "no buff"
 
     def import_character_assets(self):
         character_path = 'assets/Individual Sprite/'
-        self.animations = {'idle': [], 'Run': [], 'Jump': [], 'Fall': []}
+        self.animations = {'idle': [], 'Run': [], 'Jump': [], 'Fall': [], 'Death': []}
 
         for animation in self.animations.keys():
             full_path = character_path + animation
@@ -67,16 +70,16 @@ class Player(pygame.sprite.Sprite):
     def get_input(self):
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.direction.x = -1 * (2 if self.buff == "Fast" else 1)
             self.facing_right = False
-        elif keys[pygame.K_RIGHT]:
+        elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.direction.x = 1 * (2 if self.buff == "Fast" else 1)
             self.facing_right = True
         else:
             self.direction.x = 0
 
-        if keys[pygame.K_x] and (self.on_ground or self.buff == "Fly"):
+        if (keys[pygame.K_x] or keys[pygame.K_SPACE]) and (self.on_ground or self.buff == "Fly"):
             self.jump()
 
         if keys[pygame.K_z]:
