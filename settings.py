@@ -9,9 +9,9 @@ level_map = [
 'X                                                                                   X           C X',
 'X                                               C      C                       XX                 X',
 'X                                              XXX    XXX                XX                       X',
-'X   S   P J               C             J   XXXX        XXXX        XX            S               X',
+'X   S  P  J               C             J   XXXX        XXXX        XX            S               X',
 'X   XXXXXXX                            XXXXXX       X      XXXXX              XXXXXXX             X',
-'X             C                                                                       C           X',
+'X      M      C         X       X                                                     C           X',
 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 ]
 

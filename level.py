@@ -7,9 +7,9 @@ from player import Player
 from monster import Monster
 from settings import tile_size, screen_width, screen_height
 
+
 class Level:
     def __init__(self, level_data, surface):
-
         # level setup
         self.display_surface = surface
         self.setup_level(level_data)
@@ -22,7 +22,7 @@ class Level:
         self.item_jumps = pygame.sprite.Group()
         self.item_speeds = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
-        self.monster1 = pygame.sprite.GroupSingle()   
+        self.monster1 = pygame.sprite.GroupSingle()
         for row_index, row in enumerate(layout):
             for col_index, tile in enumerate(row):
                 if tile == 'X':
@@ -122,6 +122,8 @@ class Level:
         self.item_jumps.draw(self.display_surface)
         self.item_speeds.update(self.world_shift)
         self.item_speeds.draw(self.display_surface)
+        self.monster1.update(self.world_shift)
+        self.monster1.draw(self.display_surface)
 
         font = pygame.font.Font('fonts/Pixelboy.ttf', 80)
         life = font.render("x3", True, (255, 255, 255))

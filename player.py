@@ -1,8 +1,6 @@
 import pygame
-from traitlets import Int
 
 from support import import_folder
-
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos):

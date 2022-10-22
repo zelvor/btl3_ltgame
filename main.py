@@ -11,7 +11,6 @@ clock = pygame.time.Clock()
 
 level = Level(level_map, screen)
 
-
 # Game loop
 while True:
     # Event loop
