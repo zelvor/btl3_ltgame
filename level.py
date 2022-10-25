@@ -5,8 +5,10 @@ from item_jump import Item_jump
 from item_speed import Item_speed
 from player import Player
 from monster import Monster
+from boss import Boss
 from settings import tile_size, screen_width, screen_height
 
+bg = pygame.image.load("assets/bg.png")
 
 class Level:
     def __init__(self, level_data, surface):
@@ -37,6 +39,8 @@ class Level:
                     self.item_jumps.add(Item_jump((col_index * tile_size, row_index * tile_size), tile_size/3))
                 if tile == 'S':
                     self.item_speeds.add(Item_speed((col_index * tile_size, row_index * tile_size), tile_size/3))
+        
+        self.boss = Boss()
 
     def scroll_x(self):
         player = self.player.sprite
@@ -98,6 +102,8 @@ class Level:
         for coin in self.coins:
             if self.player.sprite.rect.colliderect(coin.rect):
                 coin.kill()
+                if self.boss.dead == False:
+                    self.boss.update_health()
         for i_jump in self.item_jumps:
             if self.player.sprite.rect.colliderect(i_jump.rect):
                 i_jump.kill()
@@ -109,6 +115,11 @@ class Level:
         return
 
     def run(self):
+        if self.boss.dead == False:
+            self.display_surface.blit(bg, (0,0))
+        else:
+            self.display_surface.fill((0, 0, 0))
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_c]:
@@ -125,6 +136,8 @@ class Level:
         self.monster1.update(self.world_shift)
         self.monster1.draw(self.display_surface)
 
+        self.boss.update(self.display_surface)
+        
         font = pygame.font.Font('fonts/Pixelboy.ttf', 80)
         life = font.render("x3", True, (255, 255, 255))
         self.display_surface.blit(life, (screen_width/4 - 100, screen_height - 50))

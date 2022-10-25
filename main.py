@@ -10,7 +10,6 @@ pygame.display.set_caption("BTL3")
 clock = pygame.time.Clock()
 
 level = Level(level_map, screen)
-
 # Game loop
 while True:
     # Event loop
@@ -19,7 +18,8 @@ while True:
             pygame.quit()
             sys.exit()
 
-    screen.fill((0, 0, 0))
+    # screen.fill((0, 0, 0))
+    
     level.run()
 
     # Update
