@@ -28,13 +28,34 @@ class Player(pygame.sprite.Sprite):
         self.hp = 5
         self.buff = "no buff"
 
+        self.attacking = False
+
+
     def import_character_assets(self):
         character_path = 'assets/Individual Sprite/'
-        self.animations = {'idle': [], 'Run': [], 'Jump': [], 'Fall': [], 'Death': []}
+        self.animations = {'idle': [], 'Run': [], 'Jump': [], 'Fall': [], 'Attack': []}
 
         for animation in self.animations.keys():
             full_path = character_path + animation
             self.animations[animation] = import_folder(full_path)
+
+
+    def attack_animate(self):
+        self.animation_speed = 0.3
+        animation = self.animations[self.status]
+        # loop over frame index
+        self.frame_index += self.animation_speed
+        if self.frame_index >= len(animation):
+            self.status = 'idle'
+            self.attacking = False
+            self.animation_speed = 0.15
+        else:
+            image = animation[int(self.frame_index)]
+            if self.facing_right:
+                self.image = image
+            else:
+                flipped_image = pygame.transform.flip(image, True, False)
+                self.image = flipped_image
 
     def animate(self):
         animation = self.animations[self.status]
@@ -83,16 +104,23 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_z]:
             self.dash()
 
+        if keys[pygame.K_q]:
+            self.attack()
+
+
     def get_status(self):
-        if self.direction.y < 0:
-            self.status = 'Jump'
-        elif self.direction.y > 1:
-            self.status = 'Fall'
+        if self.attacking:
+            self.status = 'Attack'
         else:
-            if self.direction.x != 0:
-                self.status = 'Run'
+            if self.direction.y < 0:
+                self.status = 'Jump'
+            elif self.direction.y > 1:
+                self.status = 'Fall'
             else:
-                self.status = 'idle'
+                if self.direction.x != 0:
+                    self.status = 'Run'
+                else:
+                    self.status = 'idle'
 
     def apply_gravity(self):
         self.direction.y += self.gravity
@@ -106,9 +134,15 @@ class Player(pygame.sprite.Sprite):
         dash = (1 if self.facing_right == True else -1)
         self.direction.x *= 1.5
 
+    def attack(self):
+        self.attacking = True
+
     def update(self):
         self.get_input()
         self.get_status()
-        self.animate()
+        if self.attacking:
+            self.attack_animate()
+        else:
+            self.animate()
 
         # self.apply_gravity()
