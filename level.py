@@ -24,7 +24,7 @@ class Level:
         self.item_jumps = pygame.sprite.Group()
         self.item_speeds = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
-        self.monster1 = pygame.sprite.GroupSingle()
+        self.monster1 = pygame.sprite.Group()
         for row_index, row in enumerate(layout):
             for col_index, tile in enumerate(row):
                 if tile == 'X':
@@ -112,7 +112,15 @@ class Level:
             if self.player.sprite.rect.colliderect(i_speed.rect):
                 i_speed.kill()
                 self.player.sprite.buff = "Fast"
+
         return
+
+    def monster_attack(self):
+        if self.player.sprite.status == "Attack":
+            #check collision with monster
+            for monster in self.monster1:
+                if self.player.sprite.rect.colliderect(monster.rect):
+                    monster.kill()
 
     def run(self):
         if self.boss.dead == False:
@@ -124,6 +132,9 @@ class Level:
 
         if keys[pygame.K_c]:
             self.interact()
+        
+        if keys[pygame.K_q]:
+            self.monster_attack()
 
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)

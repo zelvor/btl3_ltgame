@@ -81,8 +81,6 @@ class Monster(pygame.sprite.Sprite):
         self.rect.x += self.direction.x
         if self.time > 240:
             self.time = 0
-
-        
    
     def update(self, x_shift):
         self.rect.x += x_shift
