@@ -1,5 +1,5 @@
 import pygame
-from support import import_folder
+from support import import_monster
 
 
 class Monster(pygame.sprite.Sprite):
@@ -8,13 +8,13 @@ class Monster(pygame.sprite.Sprite):
         self.import_character_assets()
         self.frame_index = 0
         self.animation_speed = 0.15
-        self.image = self.animations['idle'][self.frame_index]
+        self.image = self.animations['Stand'][self.frame_index]
         # self.image = self.image.subsurface((16,8,24,36))
         # self.image = pygame.transform.scale(self.image, (48,64))
         self.rect = self.image.get_rect(topleft=pos)
         self.direction = pygame.math.Vector2(0, 0)
 
-        self.status = 'idle'
+        self.status = 'Stand'
         self.on_ground = False
         self.on_ceiling = False
         self.on_left = False
@@ -23,12 +23,12 @@ class Monster(pygame.sprite.Sprite):
         self.time = 0
 
     def import_character_assets(self):
-        character_path = 'assets/Individual Sprite/'
-        self.animations = {'idle': [], 'Run': [], 'Jump': [], 'Fall': []}
+        character_path = 'assets/1/'
+        self.animations = {'Attack': [], 'Run': [], 'Stand': []}
 
         for animation in self.animations.keys():
             full_path = character_path + animation
-            self.animations[animation] = import_folder(full_path)
+            self.animations[animation] = import_monster(full_path)
 
     def get_status(self):
         if self.direction.y < 0:
@@ -39,7 +39,7 @@ class Monster(pygame.sprite.Sprite):
             if self.direction.x != 0:
                 self.status = 'Run'
             else:
-                self.status = 'idle'
+                self.status = 'Stand'
 
     def animate(self):
         animation = self.animations[self.status]
