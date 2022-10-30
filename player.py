@@ -27,7 +27,7 @@ class Player(pygame.sprite.Sprite):
         #status player
         self.hp = 1000
         self.buff = "no buff"
-
+        self.timer = 0
         self.attacking = False
 
 
@@ -138,6 +138,10 @@ class Player(pygame.sprite.Sprite):
         self.attacking = True
 
     def update(self):
+        self.timer += 1
+        if (self.timer == 300):
+            self.buff = "no buff"
+
         self.get_input()
         self.get_status()
         if self.attacking:

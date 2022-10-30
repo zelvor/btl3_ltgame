@@ -22,6 +22,8 @@ class Level:
         self.current_x = 0
         self.SE = SoundEffect()
         # self.SE.playMain()
+        self.font = pygame.font.Font('fonts/Pixelboy.ttf', 80)
+        self.win_font = pygame.font.Font('fonts/Pixelboy.ttf', 200)
 
     def setup_level(self, layout):
         self.tiles = pygame.sprite.Group()
@@ -124,12 +126,14 @@ class Level:
         for i_jump in self.item_jumps:
             if self.player.sprite.rect.colliderect(i_jump.rect):
                 self.SE.playJumpB()
-                i_jump.kill()
+                # i_jump.kill()
+                self.player.sprite.timer = 0
                 self.player.sprite.buff = "Fly"
         for i_speed in self.item_speeds:
             if self.player.sprite.rect.colliderect(i_speed.rect):
                 self.SE.playSpeedB()
-                i_speed.kill()
+                # i_speed.kill()
+                self.player.sprite.timer = 0
                 self.player.sprite.buff = "Fast"
 
         return
@@ -147,7 +151,7 @@ class Level:
         else:
             self.display_surface.fill((0, 0, 0))
 
-        if(self.boss.timer % 300 == 0 and self.boss.dead == False):
+        if(self.boss.timer % 300*(self.boss.health/self.boss.total_health) == 0 and self.boss.dead == False):
             self.SE.playLaser()
             self.boss_skill.add(Boss_skill((random.uniform(screen_width, screen_width-64), random.uniform(64, screen_height-64)), tile_size, -1))
             self.boss_skill.add(Boss_skill((random.uniform(0, 10), random.uniform(64, screen_height-64)), tile_size, 1))
@@ -175,13 +179,11 @@ class Level:
         self.boss_skill.draw(self.display_surface)
         self.boss.update(self.display_surface)
         
-
-        font = pygame.font.Font('fonts/Pixelboy.ttf', 80)
-        life = font.render(str(self.player.sprite.hp), True, (255, 255, 255))
+        life = self.font.render(str(self.player.sprite.hp), True, (255, 255, 255))
         self.display_surface.blit(life, (screen_width/4 - 100, screen_height - 50))
-        score = font.render("0", True, (255, 255, 255))
+        score = self.font.render("0", True, (255, 255, 255))
         self.display_surface.blit(score, (screen_width/2 - 100, screen_height - 50))
-        buff = font.render(self.player.sprite.buff, True, (255, 255, 255))
+        buff = self.font.render(self.player.sprite.buff, True, (255, 255, 255))
         self.display_surface.blit(buff, (screen_width/4*3 - 100, screen_height - 50))
 
         self.scroll_x()
@@ -192,3 +194,11 @@ class Level:
         self.horizontal_movement_collision()
         self.vertical_movement_collision()
         self.player.draw(self.display_surface)
+
+        if (self.boss.dead == True):
+            victory = self.win_font.render("VICTORY", True, (255, 255, 255))
+            self.display_surface.blit(victory, (screen_width/4 - 100, screen_height/3 - 50))
+
+        if (self.player.sprite.hp < 0):
+            game_over = self.win_font.render("GAME OVER", True, (255, 255, 255))
+            self.display_surface.blit(game_over, (screen_width/4 - 100, screen_height/3 - 50))
