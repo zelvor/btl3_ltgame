@@ -25,7 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.on_right = False
 
         #status player
-        self.hp = 5
+        self.hp = 1000
         self.buff = "no buff"
 
         self.attacking = False
@@ -90,10 +90,10 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.direction.x = -1 * (2 if self.buff == "Fast" else 1)
+            self.direction.x = -1 * (1.5 if self.buff == "Fast" else 1)
             self.facing_right = False
         elif keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.direction.x = 1 * (2 if self.buff == "Fast" else 1)
+            self.direction.x = 1 * (1.5 if self.buff == "Fast" else 1)
             self.facing_right = True
         else:
             self.direction.x = 0

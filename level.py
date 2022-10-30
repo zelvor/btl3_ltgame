@@ -1,11 +1,14 @@
 import pygame
+import random
 from tiles import Tile
 from coins import Coin
 from item_jump import Item_jump
 from item_speed import Item_speed
+from boss_skill import Boss_skill
 from player import Player
 from monster import Monster
 from boss import Boss
+from soundEffect import SoundEffect
 from settings import tile_size, screen_width, screen_height
 
 bg = pygame.image.load("assets/bg.png")
@@ -17,14 +20,18 @@ class Level:
         self.setup_level(level_data)
         self.world_shift = 0
         self.current_x = 0
-        
+        self.SE = SoundEffect()
+        # self.SE.playMain()
+
     def setup_level(self, layout):
         self.tiles = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
         self.item_jumps = pygame.sprite.Group()
         self.item_speeds = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
-        self.monster1 = pygame.sprite.Group()
+        self.monsters = pygame.sprite.Group()
+        self.boss_skill = pygame.sprite.Group()
+
         for row_index, row in enumerate(layout):
             for col_index, tile in enumerate(row):
                 if tile == 'X':
@@ -32,7 +39,7 @@ class Level:
                 if tile == 'P':
                     self.player.add(Player((col_index * tile_size, row_index * tile_size)))
                 if tile == 'M':
-                    self.monster1.add(Monster((col_index * tile_size, row_index * tile_size)))
+                    self.monsters.add(Monster((col_index * tile_size, row_index * tile_size)))
                 if tile == 'C':
                     self.coins.add(Coin((col_index * tile_size, row_index * tile_size), tile_size/2))
                 if tile == 'J':
@@ -97,19 +104,31 @@ class Level:
         if player.on_ceiling and player.direction.y > 0:
             player.on_ceiling = False
 
+    def damage_collision(self):
+        for monster in self.monsters:
+            if self.player.sprite.rect.colliderect(monster.rect):
+                self.player.sprite.hp -= 5
+
+        for bullet in self.boss_skill:
+            if self.player.sprite.rect.colliderect(bullet.rect):
+                self.player.sprite.hp -= 5
+
     def interact(self):
         #Check pick up coin and stuff
         for coin in self.coins:
             if self.player.sprite.rect.colliderect(coin.rect):
+                self.SE.playCoin()
                 coin.kill()
                 if self.boss.dead == False:
                     self.boss.update_health()
         for i_jump in self.item_jumps:
             if self.player.sprite.rect.colliderect(i_jump.rect):
+                self.SE.playJumpB()
                 i_jump.kill()
                 self.player.sprite.buff = "Fly"
         for i_speed in self.item_speeds:
             if self.player.sprite.rect.colliderect(i_speed.rect):
+                self.SE.playSpeedB()
                 i_speed.kill()
                 self.player.sprite.buff = "Fast"
 
@@ -118,7 +137,7 @@ class Level:
     def monster_attack(self):
         if self.player.sprite.status == "Attack":
             #check collision with monster
-            for monster in self.monster1:
+            for monster in self.monsters:
                 if self.player.sprite.rect.colliderect(monster.rect):
                     monster.kill()
 
@@ -128,11 +147,17 @@ class Level:
         else:
             self.display_surface.fill((0, 0, 0))
 
+        if(self.boss.timer % 300 == 0 and self.boss.dead == False):
+            self.SE.playLaser()
+            self.boss_skill.add(Boss_skill((random.uniform(screen_width, screen_width-64), random.uniform(64, screen_height-64)), tile_size, -1))
+            self.boss_skill.add(Boss_skill((random.uniform(0, 10), random.uniform(64, screen_height-64)), tile_size, 1))
+            # self.boss_skill.add(Boss_skill((450, 450), tile_size*random.uniform(0.9, 1)))
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_c]:
             self.interact()
-        
+
         if keys[pygame.K_q]:
             self.monster_attack()
 
@@ -144,13 +169,15 @@ class Level:
         self.item_jumps.draw(self.display_surface)
         self.item_speeds.update(self.world_shift)
         self.item_speeds.draw(self.display_surface)
-        self.monster1.update(self.world_shift)
-        self.monster1.draw(self.display_surface)
-
+        self.monsters.update(self.world_shift)
+        self.monsters.draw(self.display_surface)
+        self.boss_skill.update(self.world_shift)
+        self.boss_skill.draw(self.display_surface)
         self.boss.update(self.display_surface)
         
+
         font = pygame.font.Font('fonts/Pixelboy.ttf', 80)
-        life = font.render("x3", True, (255, 255, 255))
+        life = font.render(str(self.player.sprite.hp), True, (255, 255, 255))
         self.display_surface.blit(life, (screen_width/4 - 100, screen_height - 50))
         score = font.render("0", True, (255, 255, 255))
         self.display_surface.blit(score, (screen_width/2 - 100, screen_height - 50))
@@ -158,6 +185,8 @@ class Level:
         self.display_surface.blit(buff, (screen_width/4*3 - 100, screen_height - 50))
 
         self.scroll_x()
+
+        self.damage_collision()
 
         self.player.update()
         self.horizontal_movement_collision()
