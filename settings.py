@@ -3,15 +3,15 @@ level_map = [
 'X                                   J                               J                            CX',
 'X                                   X                               X                            XX',
 'X                                                                                                 X',
-'X J                        C                                C                                  C  X',
-'XXX            XXX   XX   XXXX     XXXXX    XXXX    XXX    XXX                                 XXXX',
+'X J                        C       M     M                  C                                  C  X',
+'XXX            XXX   XX   XXXX     XXXXXXXXXXXX     XXX    XXX                                 XXXX',
 'X      XXXX                                                     XX   XXX               XX         X',
 'X                                                                                   X           C X',
 'X                           C                               X                XXX                  X',
 'X                                X             XX     XXX                X                 X      X',
 'X P                     X        X X        XXXX   X                     XX   M        X          X',
 'XXX                 X   X        X     XXXXXX                                 XXXXXXX             X',
-'XM  CCCCCCC       M        M    SX                     M                M             M          SX',
+'XM  CCCCCCC       M        M    SXM                    M                M             M          SX',
 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 ]
 

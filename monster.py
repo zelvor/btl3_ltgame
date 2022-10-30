@@ -72,14 +72,14 @@ class Monster(pygame.sprite.Sprite):
 
     def move(self):
         self.time += 1
-        if self.time < 120:
+        if self.time < 240:
             self.direction.x = 1
             self.facing_right = True
         else:
             self.direction.x = -1
             self.facing_right = False
         self.rect.x += self.direction.x
-        if self.time > 240:
+        if self.time > 480:
             self.time = 0
    
     def update(self, x_shift):

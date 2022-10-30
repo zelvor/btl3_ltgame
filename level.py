@@ -10,7 +10,6 @@ from monster import Monster
 from boss import Boss
 from soundEffect import SoundEffect
 from settings import tile_size, screen_width, screen_height
-
 bg = pygame.image.load("assets/bg2.png")
 
 class Level:
@@ -106,14 +105,14 @@ class Level:
         if player.on_ceiling and player.direction.y > 0:
             player.on_ceiling = False
 
-    def damage_collision(self):
+    def damage_collision(self, dif):
         for monster in self.monsters:
             if self.player.sprite.rect.colliderect(monster.rect):
-                self.player.sprite.hp -= 5
+                self.player.sprite.hp -= 5 * dif
 
         for bullet in self.boss_skill:
             if self.player.sprite.rect.colliderect(bullet.rect):
-                self.player.sprite.hp -= 5
+                self.player.sprite.hp -= 5 * dif
 
     def interact(self):
         #Check pick up coin and stuff
@@ -145,7 +144,7 @@ class Level:
                 if self.player.sprite.rect.colliderect(monster.rect):
                     monster.kill()
 
-    def run(self):
+    def run(self, dif):
         
         if (self.boss.dead == True):
             victory = self.win_font.render("VICTORY", True, (255, 255, 255))
@@ -164,6 +163,8 @@ class Level:
                 self.SE.playLaser()
                 self.boss_skill.add(Boss_skill((random.uniform(screen_width, screen_width-64), random.uniform(76, screen_height-140)), tile_size, -1))
                 self.boss_skill.add(Boss_skill((random.uniform(0, 10), random.uniform(76, screen_height-140)), tile_size, 1))
+                if dif == 2:
+                    self.boss_skill.add(Boss_skill((random.uniform(0, 10), random.uniform(76, screen_height-140)), tile_size, 1))
                 # self.boss_skill.add(Boss_skill((450, 450), tile_size*random.uniform(0.9, 1)))
 
             self.tiles.update(self.world_shift)
@@ -178,7 +179,6 @@ class Level:
             self.monsters.draw(self.display_surface)
             self.boss_skill.update(self.world_shift)
             self.boss_skill.draw(self.display_surface)
-            self.boss.update(self.display_surface)
             
             life = self.font.render(str(self.player.sprite.hp), True, (255, 255, 255))
             self.display_surface.blit(life, (screen_width/4 - 100, screen_height - 50))
@@ -189,7 +189,7 @@ class Level:
 
             self.scroll_x()
 
-            self.damage_collision()
+            self.damage_collision(dif)
 
             self.player.update()
             self.horizontal_movement_collision()
@@ -204,3 +204,5 @@ class Level:
 
             if keys[pygame.K_q]:
                 self.monster_attack()
+            
+            self.boss.update(self.display_surface)
