@@ -11,7 +11,7 @@ from boss import Boss
 from soundEffect import SoundEffect
 from settings import tile_size, screen_width, screen_height
 
-bg = pygame.image.load("assets/bg.png")
+bg = pygame.image.load("assets/bg2.png")
 
 class Level:
     def __init__(self, level_data, surface):
@@ -43,11 +43,11 @@ class Level:
                 if tile == 'M':
                     self.monsters.add(Monster((col_index * tile_size, row_index * tile_size)))
                 if tile == 'C':
-                    self.coins.add(Coin((col_index * tile_size, row_index * tile_size), tile_size/2))
+                    self.coins.add(Coin((col_index * tile_size + 16, row_index * tile_size + 16), tile_size/2))
                 if tile == 'J':
-                    self.item_jumps.add(Item_jump((col_index * tile_size, row_index * tile_size), tile_size/3))
+                    self.item_jumps.add(Item_jump((col_index * tile_size + 20, row_index * tile_size + 20), tile_size/3))
                 if tile == 'S':
-                    self.item_speeds.add(Item_speed((col_index * tile_size, row_index * tile_size), tile_size/3))
+                    self.item_speeds.add(Item_speed((col_index * tile_size + 20, row_index * tile_size + 20), tile_size/3))
         
         self.boss = Boss()
 
@@ -146,59 +146,61 @@ class Level:
                     monster.kill()
 
     def run(self):
-        if self.boss.dead == False:
-            self.display_surface.blit(bg, (0,0))
-        else:
-            self.display_surface.fill((0, 0, 0))
-
-        if(self.boss.timer % 300*(self.boss.health/self.boss.total_health) == 0 and self.boss.dead == False):
-            self.SE.playLaser()
-            self.boss_skill.add(Boss_skill((random.uniform(screen_width, screen_width-64), random.uniform(64, screen_height-64)), tile_size, -1))
-            self.boss_skill.add(Boss_skill((random.uniform(0, 10), random.uniform(64, screen_height-64)), tile_size, 1))
-            # self.boss_skill.add(Boss_skill((450, 450), tile_size*random.uniform(0.9, 1)))
-
-        keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_c]:
-            self.interact()
-
-        if keys[pygame.K_q]:
-            self.monster_attack()
-
-        self.tiles.update(self.world_shift)
-        self.tiles.draw(self.display_surface)
-        self.coins.update(self.world_shift)
-        self.coins.draw(self.display_surface)
-        self.item_jumps.update(self.world_shift)
-        self.item_jumps.draw(self.display_surface)
-        self.item_speeds.update(self.world_shift)
-        self.item_speeds.draw(self.display_surface)
-        self.monsters.update(self.world_shift)
-        self.monsters.draw(self.display_surface)
-        self.boss_skill.update(self.world_shift)
-        self.boss_skill.draw(self.display_surface)
-        self.boss.update(self.display_surface)
         
-        life = self.font.render(str(self.player.sprite.hp), True, (255, 255, 255))
-        self.display_surface.blit(life, (screen_width/4 - 100, screen_height - 50))
-        score = self.font.render("0", True, (255, 255, 255))
-        self.display_surface.blit(score, (screen_width/2 - 100, screen_height - 50))
-        buff = self.font.render(self.player.sprite.buff, True, (255, 255, 255))
-        self.display_surface.blit(buff, (screen_width/4*3 - 100, screen_height - 50))
-
-        self.scroll_x()
-
-        self.damage_collision()
-
-        self.player.update()
-        self.horizontal_movement_collision()
-        self.vertical_movement_collision()
-        self.player.draw(self.display_surface)
-
         if (self.boss.dead == True):
             victory = self.win_font.render("VICTORY", True, (255, 255, 255))
-            self.display_surface.blit(victory, (screen_width/4 - 100, screen_height/3 - 50))
+            self.display_surface.blit(victory, (screen_width/4, screen_height/3 - 50))
 
-        if (self.player.sprite.hp < 0):
+        elif (self.player.sprite.hp < 0):
             game_over = self.win_font.render("GAME OVER", True, (255, 255, 255))
-            self.display_surface.blit(game_over, (screen_width/4 - 100, screen_height/3 - 50))
+            self.display_surface.blit(game_over, (screen_width/4 - 50, screen_height/3 - 50))
+        else:
+            if self.boss.dead == False:
+                self.display_surface.blit(bg, (0,0))
+            else:
+                self.display_surface.fill((0, 0, 0))
+
+            if(self.boss.timer % (300 *(0.1 + 0.9*(self.boss.health/self.boss.total_health))) == 0 and self.boss.dead == False):
+                self.SE.playLaser()
+                self.boss_skill.add(Boss_skill((random.uniform(screen_width, screen_width-64), random.uniform(76, screen_height-140)), tile_size, -1))
+                self.boss_skill.add(Boss_skill((random.uniform(0, 10), random.uniform(76, screen_height-140)), tile_size, 1))
+                # self.boss_skill.add(Boss_skill((450, 450), tile_size*random.uniform(0.9, 1)))
+
+            self.tiles.update(self.world_shift)
+            self.tiles.draw(self.display_surface)
+            self.coins.update(self.world_shift)
+            self.coins.draw(self.display_surface)
+            self.item_jumps.update(self.world_shift)
+            self.item_jumps.draw(self.display_surface)
+            self.item_speeds.update(self.world_shift)
+            self.item_speeds.draw(self.display_surface)
+            self.monsters.update(self.world_shift)
+            self.monsters.draw(self.display_surface)
+            self.boss_skill.update(self.world_shift)
+            self.boss_skill.draw(self.display_surface)
+            self.boss.update(self.display_surface)
+            
+            life = self.font.render(str(self.player.sprite.hp), True, (255, 255, 255))
+            self.display_surface.blit(life, (screen_width/4 - 100, screen_height - 50))
+            score = self.font.render("0", True, (255, 255, 255))
+            self.display_surface.blit(score, (screen_width/2 - 100, screen_height - 50))
+            buff = self.font.render(self.player.sprite.buff, True, (255, 255, 255))
+            self.display_surface.blit(buff, (screen_width/4*3 - 100, screen_height - 50))
+
+            self.scroll_x()
+
+            self.damage_collision()
+
+            self.player.update()
+            self.horizontal_movement_collision()
+            self.vertical_movement_collision()
+            self.player.draw(self.display_surface)
+
+            
+            keys = pygame.key.get_pressed()
+
+            if keys[pygame.K_c]:
+                self.interact()
+
+            if keys[pygame.K_q]:
+                self.monster_attack()

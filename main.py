@@ -17,7 +17,6 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-
     # screen.fill((0, 0, 0))
     
     level.run()
@@ -25,3 +24,7 @@ while True:
     # Update
     pygame.display.update()
     clock.tick(60)
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_p]:
+        # level.kill()
+        level = Level(level_map, screen)

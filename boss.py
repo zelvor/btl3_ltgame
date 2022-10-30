@@ -23,5 +23,7 @@ class Boss():
 
     def update(self, screen):
         self.timer += 1
-        health = pygame.Rect(250, 16, 600*(self.health/self.total_health), 32)
+        health = pygame.Rect(340, 16, 600*(self.health/self.total_health), 32)
+        health_border = pygame.Rect(339, 15, 602, 34)
+        pygame.draw.rect(screen, (0, 0, 0), health_border)
         pygame.draw.rect(screen, (254, 0, 0), health)
