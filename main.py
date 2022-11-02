@@ -8,8 +8,6 @@ from level import Level
 def main():
     global dif
     pygame.init()
-    screen= pygame.image.load("assets/bg5.png")
-    image = pygame.transform.scale(image, (screen_width, screen_height))
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("BTL3")
     clock = pygame.time.Clock()
