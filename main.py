@@ -8,14 +8,15 @@ from level import Level
 def main():
     global dif
     pygame.init()
+
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("BTL3")
     clock = pygame.time.Clock()
-
     level = Level(level_map, screen)
     # Game loop
     while True:
         # Event loop
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -44,47 +45,46 @@ def about(screen):
 def main_menu():
     global dif
     pygame.init()
-
+    bg_img = pygame.image.load("assets/bg5.png")
+    bg_img = pygame.transform.scale(bg_img,(screen_width, screen_height))
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption('Super Maria World')
     screen.fill((0,0,0))
- 
+    screen.blit(bg_img,(0,0))
+
     #Title
     game_title = pygame.font.Font('fonts/Pixelboy.ttf', 160)
-    game_title_text = game_title.render('Super Maria World', True, (255, 255, 255))
+    game_title_text = game_title.render('Super Maria World', True, (0, 0, 0))
     screen.blit(game_title_text, (60, 250))
     #start button with text
     start_button = pygame.Rect(290, 588, 200, 70)
-    pygame.draw.rect(screen, (0, 0, 0), start_button)
     font = pygame.font.Font('fonts/Pixelboy.ttf', 80)
-    text = font.render('Start', True, (255, 255, 255))
+    text = font.render('Start', True, (0, 0, 0))
     screen.blit(text, (300, 600))
 
     #options button with text
     options_button = pygame.Rect(290, 712, 210, 70)
-    pygame.draw.rect(screen, (0, 0, 0), options_button)
     font = pygame.font.Font('fonts/Pixelboy.ttf', 80)
-    text = font.render(("Easy" if dif == 1 else "Hard"), True, (255, 255, 255))
+    text = font.render(("Easy" if dif == 1 else "Hard"), True, (0, 0, 0))
     screen.blit(text, (300, 725))
 
     #options button with text
     about_button = pygame.Rect(740, 588, 210, 70)
-    pygame.draw.rect(screen, (0, 0, 0), about_button)
     font = pygame.font.Font('fonts/Pixelboy.ttf', 80)
-    text = font.render(("About"), True, (255, 255, 255))
+    text = font.render(("About"), True, (0, 0, 0))
     screen.blit(text, (750, 600))
 
     #quit button with text
     quit_button = pygame.Rect(740, 712, 200, 70)
-    pygame.draw.rect(screen, (0, 0, 0), quit_button)
     font = pygame.font.Font('fonts/Pixelboy.ttf', 80)
-    text = font.render('Quit', True, (255, 255, 255))
+    text = font.render('Quit', True, (0, 0, 0))
     screen.blit(text, (750, 725))
     pygame.display.flip()
 
 
 
     while True:
+ 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
