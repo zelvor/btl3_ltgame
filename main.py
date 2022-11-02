@@ -8,6 +8,8 @@ from level import Level
 def main():
     global dif
     pygame.init()
+    screen= pygame.image.load("assets/bg5.png")
+    image = pygame.transform.scale(image, (screen_width, screen_height))
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("BTL3")
     clock = pygame.time.Clock()
@@ -44,10 +46,11 @@ def about(screen):
 def main_menu():
     global dif
     pygame.init()
-    screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption('Soccer Pong')
-    screen.fill((0,0,0))
 
+    screen = pygame.display.set_mode((screen_width, screen_height))
+    pygame.display.set_caption('Super Maria World')
+    screen.fill((0,0,0))
+ 
     #Title
     game_title = pygame.font.Font('fonts/Pixelboy.ttf', 160)
     game_title_text = game_title.render('Super Maria World', True, (255, 255, 255))

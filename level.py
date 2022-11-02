@@ -10,7 +10,7 @@ from monster import Monster
 from boss import Boss
 from soundEffect import SoundEffect
 from settings import tile_size, screen_width, screen_height
-bg = pygame.image.load("assets/bg2.png")
+bg = pygame.image.load("assets/bg5.png")
 
 class Level:
     def __init__(self, level_data, surface):
