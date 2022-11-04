@@ -137,6 +137,8 @@ class Player(pygame.sprite.Sprite):
     def attack(self):
         self.attacking = True
 
+
+
     def update(self):
         self.timer += 1
         if (self.timer == 300):
