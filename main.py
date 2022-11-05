@@ -61,7 +61,7 @@ def how_to_play():
     screen.blit(game_title_text, (60, 300))
 
     move = pygame.font.Font('fonts/Pixelboy.ttf', 80)
-    move_text = move.render('Move: Arrow Keys or WASD', True, (0,0,0))
+    move_text = move.render('Move: AD or <- ->', True, (0,0,0))
     jump_text = move.render('Jump: Spacebar or X', True, (0,0,0))
     screen.blit(move_text, (60, 450))
     screen.blit(jump_text, (60, 550))
