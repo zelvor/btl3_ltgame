@@ -7,6 +7,7 @@ from item_speed import Item_speed
 from boss_skill import Boss_skill
 from player import Player
 from monster import Monster
+from health import Health
 from boss import Boss
 from soundEffect import SoundEffect
 from settings import tile_size, screen_width, screen_height
@@ -27,6 +28,7 @@ class Level:
     def setup_level(self, layout):
         self.tiles = pygame.sprite.Group()
         self.coins = pygame.sprite.Group()
+        self.healths = pygame.sprite.Group()
         self.item_jumps = pygame.sprite.Group()
         self.item_speeds = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
@@ -43,6 +45,8 @@ class Level:
                     self.monsters.add(Monster((col_index * tile_size, row_index * tile_size)))
                 if tile == 'C':
                     self.coins.add(Coin((col_index * tile_size + 16, row_index * tile_size + 16), tile_size/2))
+                if tile == 'H':
+                    self.healths.add(Health((col_index * tile_size + 16, row_index * tile_size + 16), tile_size/2))
                 if tile == 'J':
                     self.item_jumps.add(Item_jump((col_index * tile_size + 20, row_index * tile_size + 20), tile_size/3))
                 if tile == 'S':
@@ -134,6 +138,11 @@ class Level:
                 # i_speed.kill()
                 self.player.sprite.timer = 0
                 self.player.sprite.buff = "Fast"
+        for health in self.healths:
+            if self.player.sprite.rect.colliderect(health.rect):
+                self.SE.playHealth()
+                health.kill()
+                self.player.sprite.hp += 300
 
         return
 
@@ -150,7 +159,7 @@ class Level:
             victory = self.win_font.render("VICTORY", True, (255, 255, 255))
             self.display_surface.blit(victory, (screen_width/4, screen_height/3 - 50))
 
-        elif (self.player.sprite.hp < 0):
+        elif (self.player.sprite.hp < 0) or (self.player.sprite.rect.bottom > screen_height):
             game_over = self.win_font.render("GAME OVER", True, (255, 255, 255))
             self.display_surface.blit(game_over, (screen_width/4 - 50, screen_height/3 - 50))
         else:
@@ -175,6 +184,8 @@ class Level:
             self.item_jumps.draw(self.display_surface)
             self.item_speeds.update(self.world_shift)
             self.item_speeds.draw(self.display_surface)
+            self.healths.update(self.world_shift)
+            self.healths.draw(self.display_surface)
             self.monsters.update(self.world_shift)
             self.monsters.draw(self.display_surface)
             self.boss_skill.update(self.world_shift)

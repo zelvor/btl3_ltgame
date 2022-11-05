@@ -41,7 +41,7 @@ class Player(pygame.sprite.Sprite):
 
 
     def attack_animate(self):
-        self.animation_speed = 0.25
+        self.animation_speed = 0.4
         animation = self.animations[self.status]
         # loop over frame index
         self.frame_index += self.animation_speed

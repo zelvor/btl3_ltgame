@@ -4,15 +4,15 @@ level_map = [
 'X       XXX                         X                               X                            XX',
 'X                                                                                                 X',
 'X J                        C       M     M J                CJ                               J C  X',
-'XXX            XXX   XX   XXXX     XXXXXXXXXXXX     XXX    XXX                  S       C    XXXXXX',
+'XXX      H     XXX   XX   XXXX     XXXXXXXXXXXX     XXX    XXX       H          S       C    XXXXXX',
 'X      XXXX                                                     XX   XXX        XX     XX         X',
 'X                                                                                   X             X',
 'X                           C                               X                 XX                  X',
 'X                           X    X             XX     XXX              X                   X      X',
-'X P                     X        X X        XXXX   X                   XXXX   M        X          X',
+'X P      H              X        X X   H    XXXX   X                   XXXX   M        X          X',
 'XXX     XXXX  XXX   X   X        X     XXXXXX                                 XXXXXXX             X',
-'XM    X           M   S    M      M                    M       S        M             M           X',
-'XXXXXXXXX      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'XM    X           M   S    M      M              H     M       S        M             M       H   X',
+'XXXXXXXXX      XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   XXXXXXXXXXXXXXXXXXX   XXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 ]
 
 tile_size = 64

@@ -9,6 +9,7 @@ class SoundEffect:
         self.speed_buff = pygame.mixer.Sound("sounds/speed.mp3")
         self.laser = pygame.mixer.Sound("sounds/laser.mp3")
         # self.hurt = pygame.mixer.Sound("sounds/hurt.wav")
+        self.health_se = pygame.mixer.Sound("sounds/speed.mp3")
 
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.5)
@@ -33,3 +34,9 @@ class SoundEffect:
 
     def playLaser(self):
         self.laser.play()
+
+    def playHealth(self):
+        self.health_se.play()
+    
+    def playHurt(self):
+        self.hurt.play()
