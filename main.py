@@ -74,9 +74,6 @@ def how_to_play():
     instruction = pygame.font.Font('fonts/Pixelboy.ttf', 80)
     instruction_text = instruction.render('Press any key to continue', True, (0,0,0))
     screen.blit(instruction_text, (60, 750))
-    instruction = pygame.font.Font('fonts/Pixelboy.ttf', 80)
-    instruction_text = instruction.render('Collect coins to win', True, (0,0,0))
-    screen.blit(instruction_text, (60, 850))
     #show item
     item_jump = Item_jump((100, 100), tile_size)
     item_jump_group = pygame.sprite.Group()

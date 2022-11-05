@@ -7,7 +7,7 @@ class Monster(pygame.sprite.Sprite):
         super().__init__()
         self.import_character_assets()
         self.frame_index = 0
-        self.animation_speed = 0.15
+        self.animation_speed = 0.25
         self.image = self.animations['Stand'][self.frame_index]
         # self.image = self.image.subsurface((16,8,24,36))
         # self.image = pygame.transform.scale(self.image, (48,64))

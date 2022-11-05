@@ -13,6 +13,7 @@ from soundEffect import SoundEffect
 from settings import tile_size, screen_width, screen_height
 bg = pygame.image.load("assets/bg5.png")
 
+
 class Level:
     def __init__(self, level_data, surface):
         # level setup
@@ -35,6 +36,7 @@ class Level:
         self.monsters = pygame.sprite.Group()
         self.boss_skill = pygame.sprite.Group()
 
+
         for row_index, row in enumerate(layout):
             for col_index, tile in enumerate(row):
                 if tile == 'X':
@@ -51,6 +53,7 @@ class Level:
                     self.item_jumps.add(Item_jump((col_index * tile_size + 20, row_index * tile_size + 20), tile_size/3))
                 if tile == 'S':
                     self.item_speeds.add(Item_speed((col_index * tile_size + 20, row_index * tile_size + 20), tile_size/3))
+
         
         self.boss = Boss()
 
@@ -190,6 +193,7 @@ class Level:
             self.monsters.draw(self.display_surface)
             self.boss_skill.update(self.world_shift)
             self.boss_skill.draw(self.display_surface)
+ 
             
             life = self.font.render(str(self.player.sprite.hp), True, (255, 255, 255))
             self.display_surface.blit(life, (screen_width/4 - 100, screen_height - 50))
